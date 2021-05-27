@@ -112,6 +112,7 @@ class SoftmaxWithLoss:
     Gradient = Vector의 각 원소에 대한 미분을 정리한 것이 기울기 (Gradient)
 
     """
+
     def __init__(self):
         self.params, self.grads = [], []
         self.y = None  # softmax 의 출력
@@ -143,3 +144,31 @@ class SoftmaxWithLoss:
         dx = dx / batch_size
 
         return dx
+
+
+class Embedding:
+    """
+    word2vec 용
+    단어 ID에 해당하는 행(Vector)를 추출하는 계층
+    """
+    def __init__(self, W):
+        self.params = [W]
+        self.grads = [np.zeros_like(W)]
+        self.idx = None
+
+    def forward(self, idx):
+        W, = self.params
+        self.idx = idx
+        out = W[idx]
+        return out
+
+    def backward(self, dout):
+        dW, = self.grads
+        dW[...] = 0
+
+        # For Loop Version
+        # for i, word_id in enumerate(self.idx):
+        #     dW[word_id] = dout[i]
+
+        np.add.at(dW, self.idx, dout)
+        return None
