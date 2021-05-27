@@ -94,7 +94,7 @@ def convert_one_hot(corpus, vocab_size):
 
 
 def create_co_matrix(corpus, vocab_size, window_size=1):
-    '''동시발생 행렬 생성
+    '''동시발생 행렬(co-occurence matrix) 생성
     :param corpus: 말뭉치(단어 ID 목록)
     :param vocab_size: 어휘 수
     :param window_size: 윈도우 크기(윈도우 크기가 1이면 타깃 단어 좌우 한 단어씩이 맥락에 포함)
@@ -120,7 +120,7 @@ def create_co_matrix(corpus, vocab_size, window_size=1):
 
 
 def ppmi(C, verbose=False, eps = 1e-8):
-    '''PPMI(점별 상호정보량) 생성
+    '''PPMI(점별 상호정보량) 생성 (Positive PMI)
     :param C: 동시발생 행렬
     :param verbose: 진행 상황을 출력할지 여부
     :return:
