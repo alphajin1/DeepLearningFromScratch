@@ -4,6 +4,13 @@ from common.functions import softmax, cross_entropy_error
 
 
 class Softmax:
+    """
+    구현 규칙
+    1. 모든 계층은 forward()와 backward() method를 지닌다.
+    2. 모든 계층은 인스턴스 변수인 params와 grads를 가진다.
+        * params = weight, bias 같은 매개변수를 보관하는 리스트
+        * grads = params 에 저장된 각 매개변수에 대응하여, 해당 매개변수의 기울기를 보관하는 리스트
+    """
     def __init__(self):
         self.params, self.grads = [], []
         self.out = None
