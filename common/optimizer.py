@@ -8,6 +8,7 @@ from common.np import *
 class SGD:
     '''
     확률적 경사하강법(Stochastic Gradient Descent)
+    lr = learning_rate (학습률)
     '''
 
     def __init__(self, lr=0.01):

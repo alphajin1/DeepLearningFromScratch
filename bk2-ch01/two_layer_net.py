@@ -24,6 +24,8 @@ class TwoLayerNet:
         self.loss_layer = SoftmaxWithLoss()
 
         # 모든 가중치와 기울기를 리스트에 모은다.
+        # grads가 언제나 깊은 복사를 함.
+        # 이렇게 하면, 기울기를 그룹화하는 작업을 최초에 한번만 하면 된다는 이점이 생긴다.
         self.params, self.grads = [], []
         for layer in self.layers:
             self.params += layer.params

@@ -1,12 +1,12 @@
 # coding: utf-8
 import sys
 
-sys.path.append('../book2')  # 부모 디렉터리의 파일을 가져올 수 있도록 설정
+sys.path.append('..')  # 부모 디렉터리의 파일을 가져올 수 있도록 설정
 import numpy as np
 from common.optimizer import SGD
 from dataset import spiral
 import matplotlib.pyplot as plt
-from ch01.two_layer_net import TwoLayerNet
+from two_layer_net import TwoLayerNet
 
 # 하이퍼파라미터 설정
 max_epoch = 300
