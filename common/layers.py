@@ -11,6 +11,7 @@ class Softmax:
         * params = weight, bias 같은 매개변수를 보관하는 리스트
         * grads = params 에 저장된 각 매개변수에 대응하여, 해당 매개변수의 기울기를 보관하는 리스트
     """
+
     def __init__(self):
         self.params, self.grads = [], []
         self.out = None
@@ -79,6 +80,7 @@ class Affine:
         return out
 
     def backward(self, dout):
+        # 헷갈릴 때는 이곳을 보자.
         W, b = self.params
         dx = np.dot(dout, W.T)
         dW = np.dot(self.x.T, dout)
@@ -146,11 +148,77 @@ class SoftmaxWithLoss:
         return dx
 
 
+class SoftmaxWithLoss:
+    def __init__(self):
+        self.params, self.grads = [], []
+        self.y = None  # softmax의 출력
+        self.t = None  # 정답 레이블
+
+    def forward(self, x, t):
+        self.t = t
+        self.y = softmax(x)
+
+        # 정답 레이블이 원핫 벡터일 경우 정답의 인덱스로 변환
+        if self.t.size == self.y.size:
+            self.t = self.t.argmax(axis=1)
+
+        loss = cross_entropy_error(self.y, self.t)
+        return loss
+
+    def backward(self, dout=1):
+        batch_size = self.t.shape[0]
+
+        dx = self.y.copy()
+        dx[np.arange(batch_size), self.t] -= 1
+        dx *= dout
+        dx = dx / batch_size
+
+        return dx
+
+
+class Sigmoid:
+    def __init__(self):
+        self.params, self.grads = [], []
+        self.out = None
+
+    def forward(self, x):
+        out = 1 / (1 + np.exp(-x))
+        self.out = out
+        return out
+
+    def backward(self, dout):
+        dx = dout * (1.0 - self.out) * self.out
+        return dx
+
+
+class SigmoidWithLoss:
+    def __init__(self):
+        self.params, self.grads = [], []
+        self.loss = None
+        self.y = None  # sigmoid의 출력
+        self.t = None  # 정답 데이터
+
+    def forward(self, x, t):
+        self.t = t
+        self.y = 1 / (1 + np.exp(-x))
+
+        self.loss = cross_entropy_error(np.c_[1 - self.y, self.y], self.t)
+
+        return self.loss
+
+    def backward(self, dout=1):
+        batch_size = self.t.shape[0]
+
+        dx = (self.y - self.t) * dout / batch_size
+        return dx
+
+
 class Embedding:
     """
     word2vec 용
     단어 ID에 해당하는 행(Vector)를 추출하는 계층
     """
+
     def __init__(self, W):
         self.params = [W]
         self.grads = [np.zeros_like(W)]
